@@ -11,7 +11,7 @@ module.exports = {
           updatedAt: new Date()
         },
         {
-          title: 'Blog Two Title',
+          title: "Blog Two Title",
           content:
             "Hello... this is the body of the selected blog within the left nav :)",
           createdAt: new Date(),
@@ -25,4 +25,3 @@ module.exports = {
   down: (queryInterface, Sequelize) =>
     queryInterface.bulkDelete("Posts", null, {})
 };
-

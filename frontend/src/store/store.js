@@ -1,16 +1,15 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import logger from "redux-logger";
 
-import blogsReducer from '../reducers/blogs_reducer';
+import blogsReducer from "../reducers/blogs_reducer";
 
-const configureStore = (preloadedState = {}) => (
-    createStore(
-        blogsReducer,
-        preloadedState,
+const configureStore = (preloadedState = {}) =>
+  createStore(
+    blogsReducer,
+    preloadedState,
 
-        applyMiddleware(thunk, logger) // Allows us to view state in console
-    )
-);
+    applyMiddleware(thunk, logger) // Allows us to view state in console
+  );
 
 export default configureStore;
