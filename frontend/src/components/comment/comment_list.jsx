@@ -1,15 +1,17 @@
-import React, {useState, useEffect, useReducer} from 'react'
-
+import React, { useState, useEffect, useReducer, useRef } from 'react'
+import { animateScroll } from 'react-scroll'
+import moment from 'moment'
 import { composeComment } from '../../actions/blog_actions'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Avatar from '@material-ui/core/Avatar'
 import TextField from '@material-ui/core/TextField'
 
 const mapStateToProps = (state) => {
@@ -28,7 +30,6 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
@@ -41,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         maxWidth: '100%',
         overflow: 'auto',
-        height: '500px',
+        height: '50vh',
+        marginTop: '20px',
         backgroundColor: theme.palette.background.paper,
     },
     inline: {
@@ -50,17 +52,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-
-
-
-function CommentList({blogId, blog, createComment}) {
-    const [content, setContent] = useState('');
+function CommentList({ blogId, blog, createComment }) {
+    const [content, setContent] = useState('')
     const [showStatus, setShow] = useState(false)
     const classes = useStyles()
     const [, forceUpdate] = useReducer((x) => x + 1, 0)
 
+    const divRef = useRef(null)
 
-   
+    useEffect(() => {
+        scrollToBottom()
+    })
+
+    const scrollToBottom = () => {
+        animateScroll.scrollToBottom({
+            containerId: 'scrollDown',
+        })
+    }
+
     const handleSumbit = () => {
         createComment({
             blogId: blogId,
@@ -68,21 +77,58 @@ function CommentList({blogId, blog, createComment}) {
         }).then(() => {
             forceUpdate()
         })
+    }
 
-    };
+    const commentList = blog.comments
+        ? blog.comments.map((comment, i) => {
 
-
-    const commentList = blog.comments ? blog.comments.map((comment, i) => {
-
-        return (
-            <ListItem>
-                <ListItemText primary={comment.content} />
-            </ListItem>
-        )
-    }) : []
+            const timestamp = comment.createdAt
+            // const date = moment(timestamp + 'Z').fromNow()
+            const date2 = moment(comment.createdAt)
+            const formattedDate = date2.format('LT')
+              return (
+                  <ListItem alignItems="flex-start">
+                      <ListItemAvatar>
+                          <Avatar />
+                      </ListItemAvatar>
+                      <ListItemText
+                          primary={
+                              <span>
+                                  <Typography
+                                      component="span"
+                                      variant="body2"
+                                      className={classes.inline}
+                                      color="textPrimary"
+                                  >
+                                      Anonymous
+                                  </Typography>
+                                  &nbsp;
+                                  {formattedDate}
+                              </span>
+                          }
+                          secondary={
+                              <React.Fragment>
+                                  <Typography
+                                      component="span"
+                                      variant="body2"
+                                      className={classes.inline}
+                                      color="textPrimary"
+                                  >
+                                      {comment.content}
+                                  </Typography>
+                              </React.Fragment>
+                          }
+                      />
+                  </ListItem>
+              )
+          })
+        : []
 
     return (
         <div>
+            <List className={classes.list} id="scrollDown" ref={divRef}>
+                {commentList}
+            </List>
             <TextField
                 id="standard-full-width"
                 style={{ marginTop: '2' }}
@@ -96,7 +142,7 @@ function CommentList({blogId, blog, createComment}) {
                     shrink: true,
                 }}
                 value={content}
-                onClick={()=> setShow(true)}
+                onClick={() => setShow(true)}
             />
 
             {showStatus ? (
@@ -113,6 +159,7 @@ function CommentList({blogId, blog, createComment}) {
                         color="primary"
                         onClick={() => {
                             handleSumbit()
+                            scrollToBottom()
                             setContent('')
                         }}
                         disabled={content.length < 1}
@@ -121,10 +168,8 @@ function CommentList({blogId, blog, createComment}) {
                     </Button>
                 </div>
             ) : null}
-      
-            <List className={classes.list}>{commentList}</List>
         </div>
     )
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(CommentList);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentList)

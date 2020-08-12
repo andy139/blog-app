@@ -26,7 +26,7 @@ const theme = createMuiTheme({
 })
 
 const App = () => (
-    <div style={{ height: '100vh' }}>
+    <div style={{}}>
         <Navbar />
         <Switch>
             <ThemeProvider theme={theme}>

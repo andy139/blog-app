@@ -8,6 +8,10 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 
 import BlogCreate from './blog_create'
+
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+
 import { connect } from 'react-redux'
 import { fetchBlogs } from '../../actions/blog_actions'
 
@@ -27,6 +31,13 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
+function a11yProps(index) {
+    return {
+        id: `vertical-tab-${index}`,
+        'aria-controls': `vertical-tabpanel-${index}`,
+    }
+}
+
 function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
     const classes = useStyles()
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -34,12 +45,10 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
 
     useEffect(() => {
         fetchBlogs().then((data) => {
-            
             const blogId = data.blogs ? data.blogs.data.blogs[0].id : null
             setCurrBlogId(blogId)
         })
     }, [fetchBlogs, setCurrBlogId])
-
 
     const handleOpen = () => {
         setOpen(true)
@@ -51,27 +60,42 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
 
     const handleListItemClick = (event, index, blogId) => {
         setSelectedIndex(index)
-        setCurrBlogId(blogId)
+        // setCurrBlogId(blogId)
     }
 
     if (!blogs) return null
 
+    // const blogList = blogs.map((blog, i) => {
+    //     return (
+    //         <ListItem
+    //             button
+    //             selected={selectedIndex === i}
+    //             onClick={(event) => handleListItemClick(event, i, blog.id)}
+    //         >
+    //             <ListItemText primary={blog.title} />
+    //             {blog.comments ? blog.comments.length : 0}
+    //         </ListItem>
+    //     )
+    // })
+
     const blogList = blogs.map((blog, i) => {
-        return (
-            <ListItem
-                button
-                selected={selectedIndex === i}
-                onClick={(event) => handleListItemClick(event, i, blog.id)}
-            >
-                <ListItemText primary={blog.title} />
-                {blog.comments ? blog.comments.length : 0}
-            </ListItem>
-        )
+        return <Tab label={blog.title} onClick={() => {
+            setCurrBlogId(blog.id)
+        }}/>
     })
 
     return (
         <div className={classes.root}>
-            <List className={classes.list}>{blogList}</List>
+            <Tabs
+                orientation="vertical"
+      
+                value={selectedIndex}
+                onChange={handleListItemClick}
+                aria-label="Vertical tabs example"
+                className={classes.tabs}
+            >
+            {blogList}
+            </Tabs>
 
             {/* Sticky Bottom */}
             <div className={classes.bottomDiv}>
@@ -91,7 +115,10 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <BlogCreate handleClose={handleClose} setSelectedIndex={setSelectedIndex}/>
+                <BlogCreate
+                    handleClose={handleClose}
+                    setSelectedIndex={setSelectedIndex}
+                />
             </Modal>
         </div>
     )
@@ -102,8 +129,8 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
         padding: 0,
-        marginTop: 15,
-        height: '94vh',
+        marginTop: 10,
+        height: '92vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -113,6 +140,7 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         padding: 0,
+        height: '50vh',
     },
     grid: {
         flexGrow: 1,
@@ -129,6 +157,10 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing.unit * 4,
         outline: 'none',
+    },
+    tabs: {
+        marginTop:0,
+        borderRight: `1px solid ${theme.palette.divider}`,
     },
 }))
 
