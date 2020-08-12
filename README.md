@@ -2,7 +2,7 @@
 
 A blog application where users can create blogs and make comments on various blogs
 
-[Try out the live link](https://bestblogg.herokuapp.com/#/)
+[Live Link](https://bestblogg.herokuapp.com/#/)
 
 ## Technologies
 * **ReactJS** 
