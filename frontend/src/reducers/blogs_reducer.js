@@ -7,6 +7,16 @@ import {
     RECEIVE_NEW_COMMENT,
 } from '../actions/blog_actions'
 
+
+const commentsHelper = comments => {
+    return comments.sort(function compare(a, b) {
+        var dateA = new Date(a.createdAt)
+        var dateB = new Date(b.createdAt)
+        return dateA - dateB
+    })
+
+}
+
 const BlogsReducer = (
     state = { all: {}, blog: {}, new: undefined },
     action
@@ -19,11 +29,7 @@ const BlogsReducer = (
             return newState
         case RECEIVE_BLOG:
             let comments = action.blog.data.blog.comments
-            let sortedComments = comments.sort(function compare(a, b) {
-                var dateA = new Date(a.createdAt)
-                var dateB = new Date(b.createdAt)
-                return dateA - dateB
-            })
+            let sortedComments = commentsHelper(comments)
 
             newState.blog = action.blog.data
             newState.blog.blog.comments = sortedComments
@@ -40,13 +46,18 @@ const BlogsReducer = (
             if (!newState.blog.blog.comments) {
                 newState.blog.blog.comments = [commentData]
             } else {
-                newState.blog.blog.comments.unshift(commentData)
+                newState.blog.blog.comments.push(commentData)
                 // Find old blog and replace comment count
                 const index = _.findIndex(newState.all.blogs, {
                     id: commentData.blogId,
                 })
-                comments = newState.all.blogs[index].comments.push(commentData)
-                newState.all.blogs[index].comments = comments
+
+                debugger
+                let comments = _.cloneDeep(
+                    newState.blog.blog.comments
+                )
+                debugger
+                newState.all.blogs[index].comments = commentsHelper(comments)
             }
             return newState
         default:

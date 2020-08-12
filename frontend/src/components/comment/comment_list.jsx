@@ -9,7 +9,6 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import TextField from '@material-ui/core/TextField'
@@ -82,8 +81,6 @@ function CommentList({ blogId, blog, createComment }) {
     const commentList = blog.comments
         ? blog.comments.map((comment, i) => {
 
-            const timestamp = comment.createdAt
-            // const date = moment(timestamp + 'Z').fromNow()
             const date2 = moment(comment.createdAt)
             const formattedDate = date2.format('LT')
               return (
@@ -161,6 +158,13 @@ function CommentList({ blogId, blog, createComment }) {
                             handleSumbit()
                             scrollToBottom()
                             setContent('')
+                        }}
+                        onKeyPress={(ev) => {
+                            if (ev.ctrlKey && ev.key === 'Enter') {
+                                handleSumbit()
+                                scrollToBottom()
+                                setContent('')
+                            }
                         }}
                         disabled={content.length < 1}
                     >

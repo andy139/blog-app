@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
+import useDeepCompareEffect from 'use-deep-compare-effect'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
-
+import Typography from '@material-ui/core/Typography'
 import BlogCreate from './blog_create'
 
 import Tabs from '@material-ui/core/Tabs'
@@ -42,13 +40,15 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
     const classes = useStyles()
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [open, setOpen] = useState(false)
+    const [, forceUpdate] = useReducer((x) => x + 1, 0)
 
     useEffect(() => {
         fetchBlogs().then((data) => {
-            const blogId = data.blogs ? data.blogs.data.blogs[0].id : null
+            const blogId = data.blogs.data.blogs.length > 0 ? data.blogs.data.blogs[0].id : null
             setCurrBlogId(blogId)
         })
     }, [fetchBlogs, setCurrBlogId])
+
 
     const handleOpen = () => {
         setOpen(true)
@@ -78,23 +78,58 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
     //     )
     // })
 
+    debugger
+
     const blogList = blogs.map((blog, i) => {
-        return <Tab label={blog.title} onClick={() => {
-            setCurrBlogId(blog.id)
-        }}/>
+        return (
+            <Tab
+                label={
+                    <div className={classes.tabSpacing}>
+                        <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                            style={{ marginLeft: '15px' }}
+                        >
+                            {blog.title}
+                        </Typography>
+
+                        <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                            style={{ marginRight: '15px' }}
+                        >
+                            {blog.comments ? blog.comments.length : 0}
+                        </Typography>
+                    </div>
+                }
+                fullWidth={true}
+                onClick={() => {
+                    setCurrBlogId(blog.id)
+                }}
+            >
+                {' '}
+            </Tab>
+        )
     })
 
     return (
         <div className={classes.root}>
             <Tabs
+                indicatorColor="primary"
                 orientation="vertical"
-      
+                variant="fullWidth"
                 value={selectedIndex}
                 onChange={handleListItemClick}
                 aria-label="Vertical tabs example"
                 className={classes.tabs}
+                scrollButtons="on"
+                TabIndicatorProps={{ className: classes.indicator }}
             >
-            {blogList}
+                {blogList}
             </Tabs>
 
             {/* Sticky Bottom */}
@@ -135,12 +170,22 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
+    indicator: {
+    height: "300px",
+        width: "20px",
+    left:0,
+  },
     bottomDiv: {
         textAlign: 'right',
     },
     list: {
         padding: 0,
         height: '50vh',
+    },
+    tabSpacing: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
     },
     grid: {
         flexGrow: 1,
@@ -159,7 +204,8 @@ const useStyles = makeStyles((theme) => ({
         outline: 'none',
     },
     tabs: {
-        marginTop:0,
+        width: '100%',
+        
         borderRight: `1px solid ${theme.palette.divider}`,
     },
 }))
