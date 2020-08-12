@@ -2,6 +2,7 @@ import {
     RECEIVE_BLOGS,
     RECEIVE_BLOG,
     RECEIVE_NEW_BLOG,
+    RECEIVE_NEW_COMMENT,
 } from '../actions/blog_actions'
 
 const BlogsReducer = (
@@ -19,8 +20,15 @@ const BlogsReducer = (
             return newState
         case RECEIVE_NEW_BLOG:
             const blogData = action.blog.data.blog
-            newState.all.blogs.push(blogData)
+            //shift new blog data into newState
+            newState.all.blogs.unshift(blogData)
             newState.blog = action.blog.data
+            
+            return newState
+        case RECEIVE_NEW_COMMENT:
+        
+            const commentData = action.comment.data.comment;
+            newState.blog.blog.comments.unshift(commentData)
             return newState
         default:
             return state

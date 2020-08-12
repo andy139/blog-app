@@ -11,3 +11,8 @@ export const getBlogById = id => {
 export const createBlog = data => {
   return axios.post(`/api/blogs`, data);
 };
+
+
+export const createComment = data => {
+  return axios.post(`/api/comments`, data)
+}

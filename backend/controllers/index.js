@@ -15,13 +15,14 @@ const createBlog = async (req, res) => {
 const getAllBlogs = async (req, res) => {
   try {
     const blogs = await models.Blog.findAll({
-      include: [
-        {
-          model: models.Comment,
-          as: "comments"
-        }
-      ]
-    });
+        order: [['createdAt', 'DESC']],
+        include: [
+            {
+                model: models.Comment,
+                as: 'comments',
+            },
+        ],
+    })
 
     // console.log(blogs)
 
@@ -35,14 +36,15 @@ const getBlogById = async (req, res) => {
   try {
     const { blogId } = req.params;
     const blog = await models.Blog.findOne({
-      where: { id: blogId },
-      include: [
-        {
-          model: models.Comment,
-          as: "comments"
-        }
-      ]
-    });
+        where: { id: blogId },
+        include: [
+            {
+                model: models.Comment,
+                as: 'comments',
+                order: [['createdAt', 'DESC']],
+            },
+        ],
+    })
     if (blog) {
       return res.status(200).json({ blog });
     }
@@ -56,7 +58,9 @@ const deleteBlog = async (req, res) => {
   try {
     const { blogId } = req.params;
     const deleted = await models.Blog.destroy({
-      where: { id: blogId }
+      // where: { id: blogId }
+      where: {},
+      truncate:true,
       
     });
     if (deleted) {

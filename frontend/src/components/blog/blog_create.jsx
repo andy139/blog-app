@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch) => {
 
 
 
-function BlogCreate({ handleClose, composeBlog }) {
+function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
     
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
@@ -46,6 +46,8 @@ function BlogCreate({ handleClose, composeBlog }) {
         composeBlog({
             title: title,
             content: content,
+        }).then((data) => {
+            setSelectedIndex(0)
         })
         handleClose()
     }

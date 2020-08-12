@@ -22,10 +22,10 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-function BlogShow({ currBlogId, fetchBlog, blog }) {
+function BlogShow({ currBlogId, fetchBlog, blog}) {
 
     useEffect(() => {
-        if (currBlogId)fetchBlog(currBlogId)
+        if (currBlogId) fetchBlog(currBlogId)
     }, [currBlogId])
 
 
@@ -47,7 +47,7 @@ function BlogShow({ currBlogId, fetchBlog, blog }) {
 
                     <Divider />
 
-                    <CommentList />
+                    <CommentList blogId={blog.id}/>
                 </Typography>
             </Container>
         </>

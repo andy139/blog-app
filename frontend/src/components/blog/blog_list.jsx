@@ -7,8 +7,7 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 
-
-import BlogCreate from './blog_create';
+import BlogCreate from './blog_create'
 import { connect } from 'react-redux'
 import { fetchBlogs } from '../../actions/blog_actions'
 
@@ -29,10 +28,9 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
-    const classes = useStyles();
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const [open, setOpen] = useState(false);
-
+    const classes = useStyles()
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         fetchBlogs().then((data) => {
@@ -40,23 +38,23 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
             const blogId = data.blogs.data.blogs[0].id
             setCurrBlogId(blogId)
         })
-    }, [fetchBlogs, setCurrBlogId]);
+    }, [fetchBlogs, setCurrBlogId])
 
-        const handleOpen = () => {
-            setOpen(true)
-        }
 
-        const handleClose = () => {
-            setOpen(false)
-        }
+    const handleOpen = () => {
+        setOpen(true)
+    }
 
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     const handleListItemClick = (event, index, blogId) => {
         setSelectedIndex(index)
         setCurrBlogId(blogId)
-    };
+    }
 
-    if (!blogs) return null;
+    if (!blogs) return null
 
     const blogList = blogs.map((blog, i) => {
         return (
@@ -66,10 +64,10 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
                 onClick={(event) => handleListItemClick(event, i, blog.id)}
             >
                 <ListItemText primary={blog.title} />
-                {blog.comments.length}
+                {blog.comments ? blog.comments.length : 0}
             </ListItem>
         )
-    });
+    })
 
     return (
         <div className={classes.root}>
@@ -93,7 +91,7 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <BlogCreate handleClose={handleClose}/>
+                <BlogCreate handleClose={handleClose} setSelectedIndex={setSelectedIndex}/>
             </Modal>
         </div>
     )
