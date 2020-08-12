@@ -5,8 +5,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
-import { sizing } from '@material-ui/system'
+import Modal from '@material-ui/core/Modal'
 
+
+import BlogCreate from './blog_create';
 import { connect } from 'react-redux'
 import { fetchBlogs } from '../../actions/blog_actions'
 
@@ -27,8 +29,10 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
-    const classes = useStyles()
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const classes = useStyles();
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [open, setOpen] = useState(false);
+
 
     useEffect(() => {
         fetchBlogs().then((data) => {
@@ -36,14 +40,23 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
             const blogId = data.blogs.data.blogs[0].id
             setCurrBlogId(blogId)
         })
-    }, [fetchBlogs, setCurrBlogId])
+    }, [fetchBlogs, setCurrBlogId]);
+
+        const handleOpen = () => {
+            setOpen(true)
+        }
+
+        const handleClose = () => {
+            setOpen(false)
+        }
+
 
     const handleListItemClick = (event, index, blogId) => {
         setSelectedIndex(index)
         setCurrBlogId(blogId)
-    }
+    };
 
-    if (!blogs) return null
+    if (!blogs) return null;
 
     const blogList = blogs.map((blog, i) => {
         return (
@@ -56,7 +69,7 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
                 {blog.comments.length}
             </ListItem>
         )
-    })
+    });
 
     return (
         <div className={classes.root}>
@@ -65,10 +78,23 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
             {/* Sticky Bottom */}
             <div className={classes.bottomDiv}>
                 <Divider />
-                <Button style={{ height: '50px' }} color="primary">
+                <Button
+                    style={{ height: '50px' }}
+                    onClick={handleOpen}
+                    color="primary"
+                >
                     NEW BLOG
                 </Button>
             </div>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <BlogCreate handleClose={handleClose}/>
+            </Modal>
         </div>
     )
 }
@@ -79,14 +105,13 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         padding: 0,
         marginTop: 5,
-        height: '90vh',
+        height: '94vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
     },
     bottomDiv: {
         textAlign: 'right',
-    
     },
     list: {
         padding: 0,
@@ -98,6 +123,14 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
+    },
+    modal: {
+        position: 'absolute',
+        width: theme.spacing.unit * 50,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing.unit * 4,
+        outline: 'none',
     },
 }))
 

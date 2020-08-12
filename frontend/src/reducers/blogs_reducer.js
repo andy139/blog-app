@@ -18,7 +18,9 @@ const BlogsReducer = (
             newState.blog = action.blog.data
             return newState
         case RECEIVE_NEW_BLOG:
-            newState.new = action.blog.data
+            const blogData = action.blog.data.blog
+            newState.all.blogs.push(blogData)
+            newState.blog = action.blog.data
             return newState
         default:
             return state
