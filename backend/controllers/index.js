@@ -57,6 +57,7 @@ const deleteBlog = async (req, res) => {
     const { blogId } = req.params;
     const deleted = await models.Blog.destroy({
       where: { id: blogId }
+      
     });
     if (deleted) {
       return res.status(204).send("Blog deleted");
