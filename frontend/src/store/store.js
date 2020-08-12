@@ -8,8 +8,8 @@ const configureStore = (preloadedState = {}) =>
   createStore(
     blogsReducer,
     preloadedState,
-
-    applyMiddleware(thunk, logger) // Allows us to view state in console
+    //  applyMiddleware(thunk,logger) 
+    applyMiddleware(thunk) // Allows us to view state in console
   );
 
 export default configureStore;

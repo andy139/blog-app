@@ -33,22 +33,45 @@ function BlogShow({ currBlogId, fetchBlog, blog}) {
 
     return (
         <>
-            <Container style={{ width: '80%', height:'85vh' }}>
-                <Typography
-                    component="div"
+            <Container style={{ width: '80%', height: '85vh' }}>
+                <div
                     style={{
                         height: '100%',
                         textAlign: 'left',
-                        marginTop: '30px',
+                        paddingTop: '10px',
                     }}
                 >
-                    <h3>{blog.title}</h3>
-                    <h4>{blog.content}</h4>
+                    <Typography
+                        component="div"
+                        variant="h5"
+                        color="textPrimary"
+                        style={{
+                            marginBottom: '10px',
+                            marginTop: '10px',
+                        }}
+                    >
+                        {blog.title}
+                    </Typography>
+
+                   
+                        <Typography
+                            component="div"
+                            variant="h7"
+                            style={{ marginTop: 150 }}
+                            color="textPrimary"
+                            style={{
+                                marginBottom: '10px',
+                                marginTop: '10px',
+                            }}
+                        >
+                            {blog.content}
+                        </Typography>
+               
 
                     <Divider />
 
-                    <CommentList blogId={blog.id}/>
-                </Typography>
+                    <CommentList blogId={blog.id} />
+                </div>
             </Container>
         </>
     )

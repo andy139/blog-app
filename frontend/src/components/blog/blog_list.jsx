@@ -6,10 +6,10 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import BlogCreate from './blog_create'
-
+import Avatar from '@material-ui/core/Avatar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-
+import { deepBlue } from '@material-ui/core/colors'
 import { connect } from 'react-redux'
 import { fetchBlogs } from '../../actions/blog_actions'
 
@@ -26,13 +26,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchBlogs: () => dispatch(fetchBlogs()),
-    }
-}
-
-function a11yProps(index) {
-    return {
-        id: `vertical-tab-${index}`,
-        'aria-controls': `vertical-tabpanel-${index}`,
     }
 }
 
@@ -60,25 +53,9 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
 
     const handleListItemClick = (event, index, blogId) => {
         setSelectedIndex(index)
-        // setCurrBlogId(blogId)
     }
 
     if (!blogs) return null
-
-    // const blogList = blogs.map((blog, i) => {
-    //     return (
-    //         <ListItem
-    //             button
-    //             selected={selectedIndex === i}
-    //             onClick={(event) => handleListItemClick(event, i, blog.id)}
-    //         >
-    //             <ListItemText primary={blog.title} />
-    //             {blog.comments ? blog.comments.length : 0}
-    //         </ListItem>
-    //     )
-    // })
-
-    debugger
 
     const blogList = blogs.map((blog, i) => {
         return (
@@ -87,7 +64,7 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
                     <div className={classes.tabSpacing}>
                         <Typography
                             component="span"
-                            variant="body2"
+                            variant="h7"
                             className={classes.inline}
                             color="textPrimary"
                             style={{ marginLeft: '15px' }}
@@ -102,7 +79,13 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
                             color="textPrimary"
                             style={{ marginRight: '15px' }}
                         >
-                            {blog.comments ? blog.comments.length : 0}
+                            <Avatar
+                                color="primary"
+                            
+                                className={classes.blue}
+                            >
+                                {blog.comments ? blog.comments.length : 0}
+                            </Avatar>
                         </Typography>
                     </div>
                 }
@@ -171,10 +154,10 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
     },
     indicator: {
-    height: "300px",
-        width: "20px",
-    left:0,
-  },
+        height: '300px',
+        width: '20px',
+        left: 0,
+    },
     bottomDiv: {
         textAlign: 'right',
     },
@@ -186,6 +169,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     grid: {
         flexGrow: 1,
@@ -205,8 +189,17 @@ const useStyles = makeStyles((theme) => ({
     },
     tabs: {
         width: '100%',
-        
+
         borderRight: `1px solid ${theme.palette.divider}`,
+    },
+    blue: {
+        color: 'white',
+        width: 22,
+        border: `2px solid ${theme.palette.background.paper}`,
+         padding: 2,
+        height: 22,
+        fontSize: 16,
+        backgroundColor: '#2196f3',
     },
 }))
 
