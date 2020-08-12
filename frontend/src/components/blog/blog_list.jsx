@@ -34,8 +34,8 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
 
     useEffect(() => {
         fetchBlogs().then((data) => {
-            //First Blog Id
-            const blogId = data.blogs.data.blogs[0].id
+            
+            const blogId = data.blogs ? data.blogs.data.blogs[0].id : null
             setCurrBlogId(blogId)
         })
     }, [fetchBlogs, setCurrBlogId])
@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: theme.palette.background.paper,
         padding: 0,
-        marginTop: 5,
+        marginTop: 15,
         height: '94vh',
         display: 'flex',
         flexDirection: 'column',

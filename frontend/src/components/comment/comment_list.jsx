@@ -31,6 +31,8 @@ const mapDispatchToProps = (dispatch) => {
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        display: 'flex',
+        justifyContent: 'flex-end',
         '& > *': {
             margin: theme.spacing(1),
         },
@@ -69,15 +71,15 @@ function CommentList({blogId, blog, createComment}) {
 
     };
 
-    debugger
 
-    const commentList = blog.comments.map((comment, i) => {
+    const commentList = blog.comments ? blog.comments.map((comment, i) => {
+
         return (
             <ListItem>
                 <ListItemText primary={comment.content} />
             </ListItem>
         )
-    })
+    }) : []
 
     return (
         <div>
@@ -119,21 +121,7 @@ function CommentList({blogId, blog, createComment}) {
                     </Button>
                 </div>
             ) : null}
-            {/* <div className={classes.root}>
-                <Button>CANCEL</Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        handleSumbit()
-                        setContent('')
-                    }}
-                    disabled={content.length < 1}
-                >
-                    COMMENT
-                </Button>
-            </div> */}
-
+      
             <List className={classes.list}>{commentList}</List>
         </div>
     )
