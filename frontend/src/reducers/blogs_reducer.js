@@ -52,11 +52,10 @@ const BlogsReducer = (
                     id: commentData.blogId,
                 })
 
-                debugger
                 let comments = _.cloneDeep(
                     newState.blog.blog.comments
                 )
-                debugger
+    
                 newState.all.blogs[index].comments = commentsHelper(comments)
             }
             return newState

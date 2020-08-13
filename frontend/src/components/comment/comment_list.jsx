@@ -5,6 +5,7 @@ import { composeComment } from '../../actions/blog_actions'
 import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
+
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -166,9 +167,7 @@ function CommentList({ blogId, blog, createComment }) {
                                 setContent('')
                             }
                         }}
-                        disabled={
-                            content.trim().length === 0
-                        }
+                        disabled={content.trim().length === 0}
                     >
                         COMMENT
                     </Button>
