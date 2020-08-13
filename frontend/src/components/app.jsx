@@ -4,7 +4,6 @@ import MainPage from './main/main_page'
 import Navbar from './navbar/navbar'
 import {
     createMuiTheme,
-    makeStyles,
     ThemeProvider,
 } from '@material-ui/core/styles'
 

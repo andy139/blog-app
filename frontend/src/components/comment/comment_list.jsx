@@ -166,7 +166,9 @@ function CommentList({ blogId, blog, createComment }) {
                                 setContent('')
                             }
                         }}
-                        disabled={content.length < 1}
+                        disabled={
+                            content.trim().length === 0
+                        }
                     >
                         COMMENT
                     </Button>

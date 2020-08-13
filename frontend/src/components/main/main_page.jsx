@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import BlogList from '../blog/blog_list'
 import BlogShow from '../blog/blog_show'
-import Divider from '@material-ui/core/Divider'
+
 
 
 function MainPage() {

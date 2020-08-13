@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import useDeepCompareEffect from 'use-deep-compare-effect'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
@@ -9,7 +8,7 @@ import BlogCreate from './blog_create'
 import Avatar from '@material-ui/core/Avatar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { deepBlue } from '@material-ui/core/colors'
+
 import { connect } from 'react-redux'
 import { fetchBlogs } from '../../actions/blog_actions'
 
@@ -33,7 +32,7 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
     const classes = useStyles()
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [open, setOpen] = useState(false)
-    const [, forceUpdate] = useReducer((x) => x + 1, 0)
+
 
     useEffect(() => {
         fetchBlogs().then((data) => {

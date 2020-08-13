@@ -41,6 +41,7 @@ function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
     
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
+    const [isError, setError] = useState(false)
 
     const handleSubmit = () => {
         composeBlog({
@@ -59,11 +60,11 @@ function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
                 <TextField
                     label="Title"
                     id="outlined-margin-none"
+                    error={isError}
                     defaultValue=""
                     className={classes.textField}
                     onChange={(event) => {
                         setTitle(event.target.value)
-                       
                     }}
                     placeholder="Type Body Here"
                     variant="outlined"
@@ -73,15 +74,13 @@ function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
                     id="outlined-full-width"
                     label="Body"
                     style={{ margin: 8, marginTop: 20 }}
-                    // placeholder="Type Body Here"
+                    error={isError}
                     fullWidth
                     onChange={(event) => {
-
                         setContent(event.target.value)
                     }}
                     margin="normal"
                     value={content}
-                   
                     variant="outlined"
                 />
             </div>
@@ -90,10 +89,15 @@ function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
                 <Button color="secondary" onClick={() => handleClose()}>
                     CANCEL
                 </Button>
-                <Button color="primary" onClick={() => {
-                    handleSubmit()
-
-                }}>SAVE</Button>
+                <Button
+                    disabled={title.trim().length === 0 || content.trim().length === 0}
+                    color="primary"
+                    onClick={() => {
+                        handleSubmit()
+                    }}
+                >
+                    SAVE
+                </Button>
             </div>
         </div>
     )
