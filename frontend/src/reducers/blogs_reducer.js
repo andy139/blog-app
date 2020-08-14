@@ -7,57 +7,51 @@ import {
     RECEIVE_NEW_COMMENT,
 } from '../actions/blog_actions'
 
-
-const commentsHelper = comments => {
+const sortComments = (comments) => {
     return comments.sort(function compare(a, b) {
         var dateA = new Date(a.createdAt)
         var dateB = new Date(b.createdAt)
         return dateA - dateB
     })
+}
 
+const replaceBlogsComments = (newComment, allComments, blogs) => {
+    const index = _.findIndex(blogs, {
+        id: newComment.blogId,
+    })
+    blogs[index].comments = sortComments(allComments)
 }
 
 const BlogsReducer = (
-    state = { all: {}, blog: {}, new: undefined },
+    state = {all: {}, blog: {}},
     action
 ) => {
     Object.freeze(state)
     let newState = Object.assign({}, state)
     switch (action.type) {
         case RECEIVE_BLOGS:
-            newState.all = action.blogs.data
+            newState.all = action.blogs
             return newState
         case RECEIVE_BLOG:
-            let comments = action.blog.data.blog.comments
-            let sortedComments = commentsHelper(comments)
-
-            newState.blog = action.blog.data
-            newState.blog.blog.comments = sortedComments
+            const blog = action.blog.blog
+            const comments = blog.comments
+            const sortedComments = sortComments(comments)
+            newState.blog = Object.assign({}, state.blog, blog)
+            newState.blog.comments = sortedComments
             return newState
         case RECEIVE_NEW_BLOG:
-            const blogData = action.blog.data.blog
-            //Shift new blog data into newState
+            const blogData = action.blog.blog
             newState.all.blogs.unshift(blogData)
-            newState.blog = _.cloneDeep(action.blog.data)
+            newState.blog = _.cloneDeep(blogData)
             return newState
-        
         case RECEIVE_NEW_COMMENT:
-            const commentData = action.comment.data.comment
-            if (!newState.blog.blog.comments) {
-                newState.blog.blog.comments = [commentData]
-            } else {
-                newState.blog.blog.comments.push(commentData)
-                // Find old blog and replace comment count
-                const index = _.findIndex(newState.all.blogs, {
-                    id: commentData.blogId,
-                })
-
-                let comments = _.cloneDeep(
-                    newState.blog.blog.comments
-                )
-    
-                newState.all.blogs[index].comments = commentsHelper(comments)
-            }
+            const newComment = action.comment.comment
+            const allComments = newState.blog.comments
+                ? newState.blog.comments
+                : new Array()
+            allComments.push(newComment)
+            newState.blog.comments = allComments
+            replaceBlogsComments(newComment, allComments, newState.all.blogs)
             return newState
         default:
             return state

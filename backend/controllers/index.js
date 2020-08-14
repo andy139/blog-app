@@ -23,9 +23,6 @@ const getAllBlogs = async (req, res) => {
             },
         ],
     })
-
-    // console.log(blogs)
-
     return res.status(200).json({ blogs });
   } catch (error) {
     res.status(500).send(error.message);
@@ -58,10 +55,8 @@ const deleteBlog = async (req, res) => {
   try {
     const { blogId } = req.params;
     const deleted = await models.Blog.destroy({
-      // where: { id: blogId }
       where: {},
       truncate:true,
-      
     });
     if (deleted) {
       return res.status(204).send("Blog deleted");

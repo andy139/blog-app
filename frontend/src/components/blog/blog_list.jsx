@@ -8,7 +8,6 @@ import BlogCreate from './blog_create'
 import Avatar from '@material-ui/core/Avatar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-
 import { connect } from 'react-redux'
 import { fetchBlogs } from '../../actions/blog_actions'
 
@@ -36,11 +35,10 @@ function BlogList({ fetchBlogs, blogs, setCurrBlogId }) {
 
     useEffect(() => {
         fetchBlogs().then((data) => {
-            const blogId = data.blogs.data.blogs.length > 0 ? data.blogs.data.blogs[0].id : null
+            const blogId = data.blogs.blogs.length > 0 ? data.blogs.blogs[0].id : null
             setCurrBlogId(blogId)
         })
     }, [fetchBlogs, setCurrBlogId])
-
 
     const handleOpen = () => {
         setOpen(true)

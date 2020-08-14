@@ -5,13 +5,9 @@ import Grid from '@material-ui/core/Grid'
 import BlogList from '../blog/blog_list'
 import BlogShow from '../blog/blog_show'
 
-
-
 function MainPage() {
     const classes = useStyles()
     const [currBlogId, setCurrBlogId] = useState(null);
-
-    
 
     return (
         <div className={classes.root}>
@@ -22,14 +18,10 @@ function MainPage() {
                         <BlogList setCurrBlogId={setCurrBlogId}/>
                     </Paper>
                 </Grid>
-
-                
                 <Grid item xs={8}>
                     <Paper className={classes.blog}>
                         {' '}
-                        <BlogShow currBlogId={currBlogId}/>
-                        
-                      
+                        <BlogShow currBlogId={currBlogId}/> 
                     </Paper>
                 </Grid>
             </Grid>
@@ -42,7 +34,6 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         
     },
-
     bloglist: {
         textAlign: 'center',
         color: theme.palette.text.secondary,

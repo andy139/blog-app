@@ -27,22 +27,22 @@ export const receiveNewBlog = blog => ({
 
 export const fetchBlogs = () => dispatch =>
   getBlogs()
-    .then(blogs => dispatch(receiveBlogs(blogs)))
+    .then(blogs => dispatch(receiveBlogs(blogs.data)))
     .catch(err => console.log(err));
 
 export const fetchBlog = id => dispatch =>
   getBlogById(id)
-    .then(blog => dispatch(receiveBlog(blog)))
+    .then(blog => dispatch(receiveBlog(blog.data)))
     .catch(err => console.log(err));
 
 export const composeBlog = data => dispatch =>
   createBlog(data)
-    .then(blog => dispatch(receiveNewBlog(blog)))
+    .then(blog => dispatch(receiveNewBlog(blog.data)))
     .catch(err => console.log(err));
 
 export const composeComment = data => dispatch => 
   createComment(data)
-    .then(data => 
-      dispatch(receiveComment(data))
+    .then(comment => 
+      dispatch(receiveComment(comment.data))
     ).catch(err => console.log(err));
 

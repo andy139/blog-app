@@ -5,7 +5,6 @@ import { composeComment } from '../../actions/blog_actions'
 import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
-
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -15,12 +14,8 @@ import Avatar from '@material-ui/core/Avatar'
 import TextField from '@material-ui/core/TextField'
 
 const mapStateToProps = (state) => {
-    if (!state.blog) {
-        return {}
-    }
-
     return {
-        blog: state.blog.blog,
+        blog: state.blog,
     }
 }
 
@@ -30,34 +25,11 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    },
-    list: {
-        width: '100%',
-        maxWidth: '100%',
-        overflow: 'auto',
-        height: '50vh',
-        marginTop: '20px',
-        backgroundColor: theme.palette.background.paper,
-    },
-    inline: {
-        display: 'inline',
-        overflow: 'auto',
-    },
-}))
-
 function CommentList({ blogId, blog, createComment }) {
     const [content, setContent] = useState('')
     const [showStatus, setShow] = useState(false)
     const classes = useStyles()
     const [, forceUpdate] = useReducer((x) => x + 1, 0)
-
     const divRef = useRef(null)
 
     useEffect(() => {
@@ -81,7 +53,6 @@ function CommentList({ blogId, blog, createComment }) {
 
     const commentList = blog.comments
         ? blog.comments.map((comment, i) => {
-
             const date2 = moment(comment.createdAt)
             const formattedDate = date2.format('LT')
               return (
@@ -176,5 +147,27 @@ function CommentList({ blogId, blog, createComment }) {
         </div>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        '& > *': {
+            margin: theme.spacing(1),
+        },
+    },
+    list: {
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'auto',
+        height: '50vh',
+        marginTop: '20px',
+        backgroundColor: theme.palette.background.paper,
+    },
+    inline: {
+        display: 'inline',
+        overflow: 'auto',
+    },
+}))
 
 export default connect(mapStateToProps, mapDispatchToProps)(CommentList)

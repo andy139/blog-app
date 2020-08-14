@@ -5,27 +5,9 @@ import Button from '@material-ui/core/Button'
 import { connect } from 'react-redux'
 import { composeBlog } from '../../actions/blog_actions'
 
-
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
-
-    return {
-        position: 'absolute',
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    }
-}
-
-
 const mapStateToProps = (state) => {
-    if (!state.new) {
-        return {}
-    }
-
     return {
-        blogs: Object.values(state.new.blog),
+        blogs: Object.values(state.all.blogs),
     }
 }
 
@@ -35,13 +17,10 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-
-
 function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
     
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
-    const [isError, setError] = useState(false)
 
     const handleSubmit = () => {
         composeBlog({
@@ -54,13 +33,13 @@ function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
     }
 
     const classes = useStyles()
+
     return (
         <div style={getModalStyle()} className={classes.modal}>
             <div>
                 <TextField
                     label="Title"
                     id="outlined-margin-none"
-                    error={isError}
                     defaultValue=""
                     className={classes.textField}
                     onChange={(event) => {
@@ -74,7 +53,6 @@ function BlogCreate({ handleClose, composeBlog, setSelectedIndex }) {
                     id="outlined-full-width"
                     label="Body"
                     style={{ margin: 8, marginTop: 20 }}
-                    error={isError}
                     fullWidth
                     onChange={(event) => {
                         setContent(event.target.value)
@@ -133,5 +111,17 @@ const useStyles = makeStyles((theme) => ({
         },
     },
 }))
+    
+function getModalStyle() {
+    const top = 50
+    const left = 50
+
+    return {
+        position: 'absolute',
+        top: `${top}%`,
+        left: `${left}%`,
+        transform: `translate(-${top}%, -${left}%)`,
+    }
+}
 
 export default connect(mapStateToProps,mapDispatchToProps)(BlogCreate)

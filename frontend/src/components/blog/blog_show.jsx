@@ -7,12 +7,8 @@ import { connect } from 'react-redux'
 import { fetchBlog } from '../../actions/blog_actions'
 
 const mapStateToProps = (state) => {
-    if (!state.blog) {
-        return {}
-    }
-
     return {
-        blog: state.blog.blog,
+        blog: state.blog,
     }
 }
 
@@ -23,11 +19,9 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 function BlogShow({ currBlogId, fetchBlog, blog}) {
-
     useEffect(() => {
         if (currBlogId) fetchBlog(currBlogId)
     }, [currBlogId])
-
 
     if (!blog) return null;
 
@@ -53,7 +47,6 @@ function BlogShow({ currBlogId, fetchBlog, blog}) {
                         {blog.title}
                     </Typography>
 
-                   
                         <Typography
                             component="div"
                             variant="h7"
@@ -65,11 +58,8 @@ function BlogShow({ currBlogId, fetchBlog, blog}) {
                             }}
                         >
                             {blog.content}
-                        </Typography>
-               
-
+                        </Typography>     
                     <Divider />
-
                     <CommentList blogId={blog.id} />
                 </div>
             </Container>
